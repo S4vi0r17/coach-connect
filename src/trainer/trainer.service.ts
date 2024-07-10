@@ -31,7 +31,6 @@ export class TrainerService {
     } catch (error) {
       this.handleException(error);
     }
-    return 'This action adds a new trainer';
   }
 
   async confirm(token: string) {
@@ -47,6 +46,25 @@ export class TrainerService {
     } catch (error) {
       this.handleException(error);
     }
+  }
+
+  async login(createTrainerDto: CreateTrainerDto) {
+    const trainer = await this.trainerModel.findOne<Trainer>({
+      email: createTrainerDto.email,
+    });
+    if (!trainer) {
+      throw new BadRequestException('Invalid email or password');
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      createTrainerDto.password,
+      trainer.password,
+    );
+    if (!isPasswordValid) {
+      throw new BadRequestException('Invalid email or password');
+    }
+
+    return trainer;
   }
 
   findAll() {

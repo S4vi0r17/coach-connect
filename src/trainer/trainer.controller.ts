@@ -25,6 +25,11 @@ export class TrainerController {
     return this.trainerService.confirm(token);
   }
 
+  @Post('login')
+  login(@Body() createTrainerDto: CreateTrainerDto) {
+    return this.trainerService.login(createTrainerDto);
+  }
+
   @Get()
   findAll() {
     return this.trainerService.findAll();
