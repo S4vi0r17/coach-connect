@@ -1,18 +1,25 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Trainer } from './entities/trainer.entity';
 import { CreateTrainerDto } from './dto/create-trainer.dto';
 import { UpdateTrainerDto } from './dto/update-trainer.dto';
 import { InjectModel } from '@nestjs/mongoose';
+import { HelpersService } from 'src/helpers/helpers.service';
 
 @Injectable()
 export class TrainerService {
   constructor(
     @InjectModel(Trainer.name)
     private readonly trainerModel: Model<Trainer>,
+    private readonly helpersService: HelpersService,
   ) {}
 
   async create(createTrainerDto: CreateTrainerDto) {
+    createTrainerDto.token = this.helpersService.idGenerator();
     try {
       const createdTrainer = await this.trainerModel.create(createTrainerDto);
       return createdTrainer;
@@ -20,6 +27,21 @@ export class TrainerService {
       this.handleException(error);
     }
     return 'This action adds a new trainer';
+  }
+
+  async confirm(token: string) {
+    const trainer = await this.trainerModel.findOne<Trainer>({ token });
+    if (!trainer) {
+      throw new BadRequestException('Invalid token');
+    }
+
+    try {
+      trainer.token = null;
+      trainer.confirmed = true;
+      return await trainer.save();
+    } catch (error) {
+      this.handleException(error);
+    }
   }
 
   findAll() {

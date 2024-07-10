@@ -20,6 +20,11 @@ export class TrainerController {
     return this.trainerService.create(createTrainerDto);
   }
 
+  @Get('confirm/:token')
+  confirm(@Param('token') token: string) {
+    return this.trainerService.confirm(token);
+  }
+
   @Get()
   findAll() {
     return this.trainerService.findAll();
