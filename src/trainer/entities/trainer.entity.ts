@@ -15,7 +15,7 @@ export class Trainer extends Document {
   @Prop({ type: String, default: null, trim: true })
   phone: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: Date.now().toString() })
   token: string;
 
   @Prop({ type: Boolean, default: false })
