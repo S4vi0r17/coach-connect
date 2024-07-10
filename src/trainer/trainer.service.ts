@@ -2,6 +2,8 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -53,7 +55,11 @@ export class TrainerService {
       email: createTrainerDto.email,
     });
     if (!trainer) {
-      throw new BadRequestException('Invalid email or password');
+      throw new NotFoundException('Trainer not found');
+    }
+
+    if (!trainer.confirmed) {
+      throw new UnauthorizedException('Please confirm your email');
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -61,7 +67,9 @@ export class TrainerService {
       trainer.password,
     );
     if (!isPasswordValid) {
-      throw new BadRequestException('Invalid email or password');
+      throw new UnauthorizedException(
+        'Invalid password. Please check your credentials and try again.',
+      );
     }
 
     return trainer;
