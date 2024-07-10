@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 import { Trainer } from './entities/trainer.entity';
 import { CreateTrainerDto } from './dto/create-trainer.dto';
 import { UpdateTrainerDto } from './dto/update-trainer.dto';
@@ -20,6 +21,10 @@ export class TrainerService {
 
   async create(createTrainerDto: CreateTrainerDto) {
     createTrainerDto.token = this.helpersService.idGenerator();
+    createTrainerDto.password = await bcrypt.hash(
+      createTrainerDto.password,
+      10,
+    );
     try {
       const createdTrainer = await this.trainerModel.create(createTrainerDto);
       return createdTrainer;
