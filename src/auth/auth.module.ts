@@ -1,14 +1,20 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './strategies/jwt-strategy';
+import { MongooseModule } from '@nestjs/mongoose';
+import { TrainerModule } from 'src/trainer/trainer.module';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
   imports: [
+    ConfigModule,
+    MongooseModule,
+    forwardRef(() => TrainerModule),
     // Import the PassportModule
     PassportModule.register({ defaultStrategy: 'jwt' }),
     // Import the JwtModule
@@ -41,5 +47,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
   ],
+  exports: [JwtStrategy, AuthService],
 })
 export class AuthModule {}
