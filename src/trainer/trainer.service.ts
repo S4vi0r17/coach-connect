@@ -12,6 +12,7 @@ import { CreateTrainerDto } from './dto/create-trainer.dto';
 import { UpdateTrainerDto } from './dto/update-trainer.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { HelpersService } from 'src/helpers/helpers.service';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class TrainerService {
@@ -19,6 +20,7 @@ export class TrainerService {
     @InjectModel(Trainer.name)
     private readonly trainerModel: Model<Trainer>,
     private readonly helpersService: HelpersService,
+    private readonly authService: AuthService,
   ) {}
 
   async create(createTrainerDto: CreateTrainerDto) {
@@ -54,6 +56,7 @@ export class TrainerService {
     const trainer = await this.trainerModel.findOne<Trainer>({
       email: createTrainerDto.email,
     });
+
     if (!trainer) {
       throw new NotFoundException('Trainer not found');
     }
@@ -66,13 +69,15 @@ export class TrainerService {
       createTrainerDto.password,
       trainer.password,
     );
+
     if (!isPasswordValid) {
       throw new UnauthorizedException(
         'Invalid password. Please check your credentials and try again.',
       );
     }
 
-    return trainer;
+    // return token
+    return this.authService.getJwtToken({ id: trainer._id as string });
   }
 
   findAll() {
