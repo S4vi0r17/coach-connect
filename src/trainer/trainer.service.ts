@@ -77,7 +77,10 @@ export class TrainerService {
     }
 
     // return token
-    return this.authService.getJwtToken({ id: trainer._id as string });
+    // return this.authService.getJwtToken({ id: trainer._id as string });
+    return {
+      token: this.authService.getJwtToken({ id: trainer._id as string }),
+    };
   }
 
   findAll() {
