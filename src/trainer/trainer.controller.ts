@@ -1,20 +1,9 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { TrainerService } from './trainer.service';
 import { CreateTrainerDto } from './dto/create-trainer.dto';
-import { UpdateTrainerDto } from './dto/update-trainer.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetTrainer } from 'src/auth/decorators/get-trainer.decorator';
 import { Trainer } from './entities/trainer.entity';
-import { profile } from 'console';
 
 @Controller('trainer')
 export class TrainerController {
@@ -41,6 +30,21 @@ export class TrainerController {
     return trainer;
   }
 
+  @Post('forgot')
+  forgot(@Body() body: { email: string }) {
+    return this.trainerService.forgot(body.email);
+  }
+
+  @Get('forgot/:token')
+  getForgot(@Param('token') token: string) {
+    return this.trainerService.checkToken(token);
+  }
+
+  @Post('forgot/:token')
+  reset(@Param('token') token: string, @Body() body: { password: string }) {
+    return this.trainerService.newPassword(token, body.password);
+  }
+
   // Testing private routes
   // @Get('private')
   // @UseGuards(AuthGuard('jwt'))
@@ -54,24 +58,4 @@ export class TrainerController {
   // privateRoute(@GetTrainer() trainer: Trainer) {
   //   return trainer;
   // }
-
-  @Get()
-  findAll() {
-    return this.trainerService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.trainerService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrainerDto: UpdateTrainerDto) {
-    return this.trainerService.update(+id, updateTrainerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.trainerService.remove(+id);
-  }
 }

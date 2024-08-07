@@ -9,7 +9,6 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { Trainer } from './entities/trainer.entity';
 import { CreateTrainerDto } from './dto/create-trainer.dto';
-import { UpdateTrainerDto } from './dto/update-trainer.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { HelpersService } from 'src/helpers/helpers.service';
 import { AuthService } from 'src/auth/auth.service';
@@ -83,20 +82,43 @@ export class TrainerService {
     };
   }
 
-  findAll() {
-    return `This action returns all trainer`;
+  async forgot(email: string) {
+    const trainer = await this.trainerModel.findOne<Trainer>({ email });
+
+    if (!trainer) {
+      throw new NotFoundException(`Trainer with email ${email} not found`);
+    }
+
+    trainer.token = this.helpersService.idGenerator();
+    await trainer.save();
+
+    return { message: 'Check your email for further instructions' };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} trainer`;
+  async checkToken(token: string) {
+    const trainer = await this.trainerModel.findOne<Trainer>({ token });
+    if (!trainer) {
+      throw new NotFoundException('Invalid token');
+    }
+
+    return trainer;
   }
 
-  update(id: number, updateTrainerDto: UpdateTrainerDto) {
-    return `This action updates a #${id} trainer`;
-  }
+  async newPassword(token: string, password: string) {
+    const trainer = await this.trainerModel.findOne<Trainer>({ token });
 
-  remove(id: number) {
-    return `This action removes a #${id} trainer`;
+    if (!trainer) {
+      throw new NotFoundException('Invalid token');
+    }
+
+    trainer.password = await bcrypt.hash(password, 10);
+    trainer.token = null;
+
+    try {
+      return await trainer.save();
+    } catch (error) {
+      this.handleException(error);
+    }
   }
 
   private handleException(error: any) {
