@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';

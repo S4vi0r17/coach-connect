@@ -13,7 +13,7 @@ export class ClientService {
     @InjectModel(Client.name)
     private readonly clientModel: Model<Client>,
     private readonly authService: AuthService,
-  ) { }
+  ) {}
 
   async create(createClientDto: CreateClientDto, trainer: Trainer) {
     const createdClient = new this.clientModel(createClientDto);
