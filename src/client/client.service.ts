@@ -27,8 +27,9 @@ export class ClientService {
     }
   }
 
-  findAll() {
-    return `This action returns all client`;
+  findAll(trainer: Trainer) {
+    // return this.clientModel.find({ trainer: trainer._id });
+    return this.clientModel.find().where('trainer').equals(trainer);
   }
 
   findOne(id: number) {

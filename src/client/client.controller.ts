@@ -29,8 +29,9 @@ export class ClientController {
   }
 
   @Get()
-  findAll() {
-    return this.clientService.findAll();
+  @UseGuards(AuthGuard('jwt'))
+  findAll(@GetTrainer() trainer: Trainer) {
+    return this.clientService.findAll(trainer);
   }
 
   @Get(':id')
