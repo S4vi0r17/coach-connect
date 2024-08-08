@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AuthService } from 'src/auth/auth.service';
@@ -13,7 +13,7 @@ export class ClientService {
     @InjectModel(Client.name)
     private readonly clientModel: Model<Client>,
     private readonly authService: AuthService,
-  ) {}
+  ) { }
 
   async create(createClientDto: CreateClientDto, trainer: Trainer) {
     const createdClient = new this.clientModel(createClientDto);
@@ -32,15 +32,31 @@ export class ClientService {
     return this.clientModel.find().where('trainer').equals(trainer);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} client`;
+  findOne(id: string, trainer: Trainer) {
+    return this.clientModel.findOne({ _id: id, trainer });
   }
 
-  update(id: number, updateClientDto: UpdateClientDto) {
-    return `This action updates a #${id} client`;
+  async update(id: string, updateClientDto: UpdateClientDto, trainer: Trainer) {
+    const client = await this.clientModel.findOne({ _id: id, trainer });
+
+    if (!client) {
+      throw new NotFoundException('Client not found');
+    }
+
+    return await this.clientModel.findOneAndUpdate(
+      { _id: id, trainer },
+      updateClientDto,
+      { new: true },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} client`;
+  async remove(id: string, trainer: Trainer) {
+    const result = await this.clientModel.deleteOne({ _id: id, trainer });
+
+    if (result.deletedCount === 0) {
+      throw new NotFoundException(`Client with ID ${id} not found`);
+    }
+
+    return { message: 'Client deleted' };
   }
 }
