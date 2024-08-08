@@ -1,15 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetTrainer } from 'src/auth/decorators/get-trainer.decorator';
+import { Trainer } from 'src/trainer/entities/trainer.entity';
 
 @Controller('client')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
   @Post()
-  create(@Body() createClientDto: CreateClientDto) {
-    return this.clientService.create(createClientDto);
+  @UseGuards(AuthGuard('jwt'))
+  create(
+    @Body() createClientDto: CreateClientDto,
+    @GetTrainer() trainer: Trainer,
+  ) {
+    return this.clientService.create(createClientDto, trainer);
   }
 
   @Get()
