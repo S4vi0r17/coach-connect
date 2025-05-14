@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CoachModule } from './coach/coach.module';
 import { AuthModule } from './auth/auth.module';
+import { ClientsModule } from './clients/clients.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,6 +16,8 @@ import { AuthModule } from './auth/auth.module';
     CoachModule,
 
     AuthModule,
+
+    ClientsModule,
   ],
   controllers: [],
   providers: [],
