@@ -26,7 +26,7 @@ export class Client {
   @Prop()
   gender: string;
 
-  @Prop()
+  @Prop({ type: [String], default: [] })
   healthNotes?: string;
 
   @Prop({ type: Date, default: Date.now })
