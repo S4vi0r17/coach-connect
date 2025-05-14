@@ -27,6 +27,27 @@ export class CoachController {
     return this.authService.loginCoach(loginCoachDto);
   }
 
+  // Validate email and generate a unique token for password reset
+  @Post('forgot-password')
+  forgotPassword(@Body('email') email: string) {
+    return this.authService.forgotPassword(email);
+  }
+
+  // Check if the token is valid
+  @Get('reset-password/:token')
+  checkResetToken(@Param('token') token: string) {
+    return this.authService.checkResetToken(token);
+  }
+
+  // Reset the password
+  @Post('reset-password/:token')
+  resetPassword(
+    @Param('token') token: string,
+    @Body('newPassword') newPassword: string,
+  ) {
+    return this.authService.resetPassword(token, newPassword);
+  }
+
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@GetCoach('coachId') coachId: string) {

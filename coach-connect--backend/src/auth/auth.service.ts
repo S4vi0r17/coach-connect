@@ -89,6 +89,49 @@ export class AuthService {
     };
   }
 
+  async forgotPassword(email: string) {
+    const coach = await this.coachModel.findOne({ email });
+
+    if (!coach) {
+      throw new BadRequestException(`Coach with email ${email} not found`);
+    }
+
+    const resetToken = this.generateUniqueToken();
+    coach.emailConfirmationToken = resetToken;
+    await coach.save();
+
+    // Here you would send the reset token to the user's email
+    return { message: 'Password reset token sent to email' };
+  }
+
+  async checkResetToken(token: string) {
+    const coach = await this.coachModel.findOne({
+      emailConfirmationToken: token,
+    });
+
+    if (!coach) {
+      throw new BadRequestException('Invalid or expired token');
+    }
+
+    return { message: 'Token is valid' };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const coach = await this.coachModel.findOne({
+      emailConfirmationToken: token,
+    });
+
+    if (!coach) {
+      throw new BadRequestException('Invalid or expired token');
+    }
+
+    coach.password = newPassword;
+    coach.emailConfirmationToken = undefined;
+
+    await coach.save();
+    return { message: 'Password reset successfully' };
+  }
+
   private generateUniqueToken() {
     return Date.now().toString(32) + Math.random().toString(36).slice(2);
   }
