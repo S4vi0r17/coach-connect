@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterCoachDto, LoginCoachDto } from './dto';
@@ -148,6 +149,14 @@ export class AuthService {
         `Coach with email ${error.keyValue?.email ?? 'unknown'} already exists`,
       );
     }
+
+    Logger.error(
+      error,
+      'AuthService',
+      'handleException',
+      'Error while creating coach',
+    );
+
     throw new InternalServerErrorException(
       `Can't create Coach - Check server logs`,
     );
