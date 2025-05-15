@@ -2,8 +2,11 @@
 
 import type React from 'react';
 import { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import axios from 'axios';
+import axiosClient from '@/config/axios.config';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,9 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { toast } from 'sonner';
 import { Separator } from '@/components/ui/separator';
-import axios from 'axios';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -30,7 +31,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      await axios.post(process.env.NEXT_PUBLIC_API_URL + '/coach/login', {
+      await axiosClient.post('/coach/login', {
         email,
         password,
       });

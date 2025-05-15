@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
-import axios from 'axios';
+import axiosClient from '@/config/axios.config';
 
 export default function ConfirmEmailPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,9 +20,7 @@ export default function ConfirmEmailPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const { status } = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/coach/confirm-email/${token}`
-      );
+      const { status } = await axiosClient.get(`/coach/confirm-email/${token}`);
 
       if (status !== 200) {
         setError('Failed to confirm email');
