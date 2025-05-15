@@ -10,6 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Coach, CoachDocument } from './entities/coach.entity';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class AuthService {
@@ -42,6 +43,14 @@ export class AuthService {
 
     try {
       const newCoach = await this.coachModel.create(registerCoachDto);
+
+      // send email confirmation
+      await this.createEmailTransport({
+        email: newCoach.email,
+        fullName: `${newCoach.firstName} ${newCoach.lastName}`,
+        token: newCoach.emailConfirmationToken,
+      });
+
       return newCoach;
     } catch (error) {
       this.handleException(error);
@@ -135,6 +144,55 @@ export class AuthService {
 
   private generateUniqueToken() {
     return Date.now().toString(32) + Math.random().toString(36).slice(2);
+  }
+
+  private async createEmailTransport({
+    email,
+    fullName,
+    token,
+  }: {
+    email: string;
+    fullName: string;
+    token: string | undefined;
+  }) {
+    // Looking to send emails in production? Check out our Email API/SMTP product!
+    const transport = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: 'Confirma tu correo electrónico',
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #222;">
+        <h2>Hola ${fullName},</h2>
+        <p>¡Gracias por registrarte en Coach Connect!</p>
+        <p>Por favor, confirma tu correo electrónico haciendo clic en el siguiente botón:</p>
+        <p>
+        <a href="${process.env.FRONTEND_URL}/confirm-email/${token}" 
+           style="display:inline-block;padding:10px 20px;background:#007bff;color:#fff;text-decoration:none;border-radius:4px;">
+          Confirmar correo
+        </a>
+        </p>
+        <p>Si no creaste una cuenta, puedes ignorar este correo.</p>
+        <hr>
+        <small>Este mensaje fue enviado automáticamente, por favor no respondas.</small>
+      </div>
+      `,
+    };
+
+    try {
+      await transport.sendMail(mailOptions);
+      Logger.log(`Email sent to ${email}`, 'AuthService');
+    } catch (error) {
+      Logger.error(`Failed to send email: ${error}`, 'AuthService');
+    }
   }
 
   private hasCode(
