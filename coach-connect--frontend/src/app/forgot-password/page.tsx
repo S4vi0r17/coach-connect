@@ -8,8 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { toast } from 'sonner';
 import { ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
+import axiosClient from '@/config/axios.config';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -18,24 +19,31 @@ export default function ForgotPasswordPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (email.trim() === '') {
+      toast('Error', {
+        description: 'Please enter a valid email address.',
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       // Call the forgot-password endpoint
-      const response = await fetch('/api/auth/forgot-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
+      const { status } = await axiosClient.post('/coach/forgot-password', {
+        email,
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to send reset email');
+      if (status !== 201) {
+        toast('Error', {
+          description: 'Failed to send reset email. Please try again.',
+        });
+        return;
       }
 
       setIsSubmitted(true);
+
       toast('Reset email sent', {
         description:
           'Check your email for instructions to reset your password.',
@@ -82,7 +90,7 @@ export default function ForgotPasswordPage() {
         </div>
 
         <Card className="aesthetic-card border-0 shadow-lg">
-          <CardContent className="pt-6">
+          <CardContent>
             {isSubmitted ? (
               <div className="flex flex-col items-center justify-center space-y-4 text-center">
                 <div className="text-sm text-aesthetic-muted">
@@ -90,7 +98,7 @@ export default function ForgotPasswordPage() {
                   <strong>{email}</strong>. Please check your email.
                 </div>
                 <Link href="/login">
-                  <Button className="w-full bg-aesthetic-accent text-white hover:bg-aesthetic-accent/90">
+                  <Button className="w-full bg-aesthetic-accent text-white hover:bg-aesthetic-accent/90 cursor-pointer">
                     Return to login
                   </Button>
                 </Link>
@@ -114,7 +122,7 @@ export default function ForgotPasswordPage() {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full bg-aesthetic-accent text-white hover:bg-aesthetic-accent/90"
+                    className="w-full bg-aesthetic-accent text-white hover:bg-aesthetic-accent/90 cursor-pointer"
                     disabled={isLoading}
                   >
                     {isLoading ? 'Sending...' : 'Send reset link'}
@@ -124,7 +132,7 @@ export default function ForgotPasswordPage() {
             )}
           </CardContent>
           <CardFooter className="flex flex-col">
-            <div className="text-sm text-aesthetic-muted text-center mt-2">
+            <div className="text-sm text-aesthetic-muted text-center">
               Remember your password?{' '}
               <Link
                 href="/login"
