@@ -4,6 +4,7 @@ import { RegisterCoachDto, LoginCoachDto } from '../auth/dto';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { GetCoach } from 'src/auth/decorators/get-coach.decorator';
+import { NewPasswordDto } from 'src/auth/dto/new-password.dto';
 
 @Controller('coach')
 export class CoachController {
@@ -43,9 +44,9 @@ export class CoachController {
   @Post('reset-password/:token')
   resetPassword(
     @Param('token') token: string,
-    @Body('newPassword') newPassword: string,
+    @Body() newPassword: NewPasswordDto,
   ) {
-    return this.authService.resetPassword(token, newPassword);
+    return this.authService.resetPassword(token, newPassword.newPassword);
   }
 
   @UseGuards(AuthGuard)

@@ -45,7 +45,7 @@ export class AuthService {
       const newCoach = await this.coachModel.create(registerCoachDto);
 
       // send email confirmation
-      await this.createEmailTransport({
+      await this.sendConfirmationEmail({
         email: newCoach.email,
         fullName: `${newCoach.firstName} ${newCoach.lastName}`,
         token: newCoach.emailConfirmationToken,
@@ -110,6 +110,12 @@ export class AuthService {
     coach.emailConfirmationToken = resetToken;
     await coach.save();
 
+    await this.sendResetPasswordEmail({
+      email: coach.email,
+      fullName: `${coach.firstName} ${coach.lastName}`,
+      token: resetToken,
+    });
+
     // Here you would send the reset token to the user's email
     return { message: 'Password reset token sent to email' };
   }
@@ -146,7 +152,7 @@ export class AuthService {
     return Date.now().toString(32) + Math.random().toString(36).slice(2);
   }
 
-  private async createEmailTransport({
+  private async sendConfirmationEmail({
     email,
     fullName,
     token,
@@ -191,7 +197,59 @@ export class AuthService {
       await transport.sendMail(mailOptions);
       Logger.log(`Email sent to ${email}`, 'AuthService');
     } catch (error) {
+      console.log(error);
       Logger.error(`Failed to send email: ${error}`, 'AuthService');
+    }
+  }
+
+  private async sendResetPasswordEmail({
+    email,
+    fullName,
+    token,
+  }: {
+    email: string;
+    fullName: string;
+    token: string | undefined;
+  }) {
+    const transport = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: 'Restablece tu contraseña',
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #222;">
+        <h2>Hola ${fullName},</h2>
+        <p>Recibimos una solicitud para restablecer tu contraseña en Coach Connect.</p>
+        <p>Puedes restablecer tu contraseña haciendo clic en el siguiente botón:</p>
+        <p>
+          <a href="${process.env.FRONTEND_URL}/reset-password/${token}" 
+             style="display:inline-block;padding:10px 20px;background:#28a745;color:#fff;text-decoration:none;border-radius:4px;">
+            Restablecer contraseña
+          </a>
+        </p>
+        <p>Si no solicitaste este cambio, puedes ignorar este correo.</p>
+        <hr>
+        <small>Este mensaje fue enviado automáticamente, por favor no respondas.</small>
+      </div>
+      `,
+    };
+
+    try {
+      await transport.sendMail(mailOptions);
+      Logger.log(`Reset password email sent to ${email}`, 'AuthService');
+    } catch (error) {
+      Logger.error(
+        `Failed to send reset password email: ${error}`,
+        'AuthService',
+      );
     }
   }
 
