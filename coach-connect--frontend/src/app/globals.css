@@ -1,9 +1,20 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-aesthetic-dark: hsl(0, 0%, 16%);
+  --color-aesthetic-medium: hsl(0, 0%, 24%);
+  --color-aesthetic-light: hsl(0, 0%, 96%);
+  --color-aesthetic-accent: hsl(22, 56%, 45%);
+  --color-aesthetic-accent-light: hsl(37, 61%, 64%);
+  --color-aesthetic-muted: hsl(0, 0%, 63%);
+  --color-aesthetic-muted-light: hsl(0, 0%, 88%);
+  --color-aesthetic-success: hsl(137, 26%, 38%);
+  --color-aesthetic-warning: hsl(37, 61%, 64%);
+  --color-aesthetic-error: hsl(357, 52%, 54%);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -41,28 +52,72 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-up: slide-up 0.5s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-up {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --radius: 0.5rem;
+  --background: hsl(0 0% 98%);
+  --foreground: hsl(0 0% 16%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 16%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 16%);
+  --primary: hsl(25 55% 45%);
+  --primary-foreground: hsl(0 0% 98%);
+  --secondary: hsl(0 0% 96%);
+  --secondary-foreground: hsl(0 0% 16%);
+  --muted: hsl(0 0% 96%);
+  --muted-foreground: hsl(0 0% 45%);
+  --accent: hsl(25 55% 45%);
+  --accent-foreground: hsl(0 0% 98%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: hsl(0 0% 90%);
+  --input: hsl(0 0% 90%);
+  --ring: hsl(25 55% 45%);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -79,24 +134,25 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: hsl(0 0% 16%);
+  --foreground: hsl(0 0% 98%);
+  --card: hsl(0 0% 20%);
+  --card-foreground: hsl(0 0% 98%);
+  --popover: hsl(0 0% 20%);
+  --popover-foreground: hsl(0 0% 98%);
+  --primary: hsl(25 55% 45%);
+  --primary-foreground: hsl(0 0% 98%);
+  --secondary: hsl(0 0% 20%);
+  --secondary-foreground: hsl(0 0% 98%);
+  --muted: hsl(0 0% 20%);
+  --muted-foreground: hsl(0 0% 65%);
+  --accent: hsl(25 55% 45%);
+  --accent-foreground: hsl(0 0% 98%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(0 85.7% 97.3%);
+  --border: hsl(0 0% 25%);
+  --input: hsl(0 0% 25%);
+  --ring: hsl(25 55% 45%);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -118,5 +174,80 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Minimalist aesthetic styles */
+@layer components {
+  .aesthetic-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .aesthetic-card {
+    @apply bg-white rounded-lg shadow-sm border-0 overflow-hidden transition-all duration-200;
+  }
+
+  .aesthetic-button {
+    @apply rounded-md font-medium transition-all duration-200;
+  }
+
+  .aesthetic-input {
+    @apply rounded-md bg-aesthetic-light border-aesthetic-muted-light focus:border-aesthetic-accent focus:ring-aesthetic-accent/20;
+  }
+
+  .aesthetic-gradient {
+    background: linear-gradient(135deg, #b25c34 0%, #d4a76a 100%);
+  }
+
+  .aesthetic-section {
+    @apply py-12 md:py-16;
+  }
+
+  .aesthetic-heading {
+    @apply font-bold tracking-tight text-aesthetic-dark;
+  }
+
+  .aesthetic-subheading {
+    @apply text-aesthetic-muted font-medium;
+  }
+
+  .aesthetic-text {
+    @apply text-aesthetic-medium;
+  }
+
+  .aesthetic-link {
+    @apply text-aesthetic-accent hover:text-aesthetic-accent-light transition-colors;
+  }
+
+  .aesthetic-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .aesthetic-badge-primary {
+    @apply bg-aesthetic-accent text-white;
+  }
+
+  .aesthetic-badge-secondary {
+    @apply bg-aesthetic-muted-light text-aesthetic-medium;
+  }
+
+  .aesthetic-badge-success {
+    @apply bg-aesthetic-success text-white;
+  }
+
+  .aesthetic-badge-warning {
+    @apply bg-aesthetic-warning text-white;
+  }
+
+  .aesthetic-badge-error {
+    @apply bg-aesthetic-error text-white;
+  }
+
+  .aesthetic-shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .aesthetic-hover {
+    @apply transition-all duration-200 hover:shadow-md;
   }
 }
