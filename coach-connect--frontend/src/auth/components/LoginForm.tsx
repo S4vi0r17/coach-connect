@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import axiosClient from '@/config/axios.config';
+import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,33 +13,31 @@ export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      await axiosClient.post('/coach/login', {
-        email,
-        password,
-      });
+    // Usa signIn de next-auth
+    const res = await signIn('credentials', {
+      redirect: false,
+      email,
+      password,
+    });
 
+    if (res?.ok) {
       toast('Login successful', {
         description: 'Welcome back to CoachConnect!',
       });
-
-      // Redirect to dashboard
       router.push('/dashboard');
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast('Login failed', {
-          description: error.response?.data.message || 'Invalid credentials',
-        });
-      }
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast('Login failed', {
+        description: res?.error || 'Invalid credentials',
+      });
     }
+    setIsLoading(false);
   };
 
   return (

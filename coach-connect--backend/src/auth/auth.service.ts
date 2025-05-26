@@ -93,6 +93,7 @@ export class AuthService {
     }
 
     return {
+      id: coach._id,
       fullName: `${coach.firstName} ${coach.lastName}`,
       email: coach.email,
       ...(await this.signIn(email)),
