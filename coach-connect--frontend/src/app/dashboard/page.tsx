@@ -1,23 +1,107 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Overview } from '@/components/dashboard/overview';
+import { RecentClients } from '@/components/dashboard/recent-clients';
+import { DashboardMobileNav } from '@/components/dashboard-mobile-nav';
 
-export default async function DashboardPage() {
-  const session = await getServerSession(authOptions);
-  console.log('session', session);
-  console.log('session accessToken', session?.accessToken);
+export default function DashboardPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-aesthetic-light p-4">
-      <div className="relative h-8 w-8 mr-2">
-        <div className="absolute inset-0 bg-gradient-to-br from-aesthetic-accent to-aesthetic-accent-light rounded-md shadow-md"></div>
-        <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">
-          CC
-        </div>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-aesthetic-dark">Dashboard</h1>
+        <DashboardMobileNav />
       </div>
-      <div className="flex items-center gap-0.5 font-bold text-xl">
-        CoachConnect
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card
+          className="aesthetic-card animate-fade-in"
+          style={{ animationDelay: '0ms' }}
+        >
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-aesthetic-muted">
+              Total Clients
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-aesthetic-accent">12</div>
+            <p className="text-xs text-aesthetic-muted">+2 from last month</p>
+          </CardContent>
+        </Card>
+        <Card
+          className="aesthetic-card animate-fade-in"
+          style={{ animationDelay: '100ms' }}
+        >
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-aesthetic-muted">
+              Active Clients
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-aesthetic-accent">10</div>
+            <p className="text-xs text-aesthetic-muted">+1 from last month</p>
+          </CardContent>
+        </Card>
+        <Card
+          className="aesthetic-card animate-fade-in"
+          style={{ animationDelay: '200ms' }}
+        >
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-aesthetic-muted">
+              Inactive Clients
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-aesthetic-accent">2</div>
+            <p className="text-xs text-aesthetic-muted">+1 from last month</p>
+          </CardContent>
+        </Card>
+        <Card
+          className="aesthetic-card animate-fade-in"
+          style={{ animationDelay: '300ms' }}
+        >
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-aesthetic-muted">
+              Client Retention
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-aesthetic-accent">83%</div>
+            <p className="text-xs text-aesthetic-muted">+5% from last month</p>
+          </CardContent>
+        </Card>
       </div>
-      <div className="ml-4 text-gray-700">
-        <p>Welcome, {session?.user.name}!</p>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4 aesthetic-card animate-fade-in">
+          <CardHeader>
+            <CardTitle className="text-aesthetic-dark">Overview</CardTitle>
+            <CardDescription className="text-aesthetic-muted">
+              Client activity for the past 30 days.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pl-2">
+            <Overview />
+          </CardContent>
+        </Card>
+        <Card
+          className="col-span-3 aesthetic-card animate-fade-in"
+          style={{ animationDelay: '200ms' }}
+        >
+          <CardHeader>
+            <CardTitle className="text-aesthetic-dark">
+              Recent Clients
+            </CardTitle>
+            <CardDescription className="text-aesthetic-muted">
+              Your most recently added clients.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RecentClients />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
