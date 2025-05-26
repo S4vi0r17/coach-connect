@@ -56,10 +56,7 @@ export function RecentClients() {
             style={{ animationDelay: `${index * 100}ms` }}
           >
             <Avatar className="h-9 w-9">
-              <AvatarImage
-                src={client.imageUrl || '/placeholder.svg'}
-                alt={client.name}
-              />
+              <AvatarImage src={client.imageUrl || ''} alt={client.name} />
               <AvatarFallback className="bg-aesthetic-accent text-white">
                 {client.name
                   .split(' ')
