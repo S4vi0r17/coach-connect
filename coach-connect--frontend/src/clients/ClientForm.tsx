@@ -73,7 +73,8 @@ export function ClientForm() {
         }
       );
 
-      // Redirect to clients list
+      toast.success('Client created successfully!');
+
       router.push('/dashboard/clients');
     } catch (error) {
       if (axios.isAxiosError(error)) {
