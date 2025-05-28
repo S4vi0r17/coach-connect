@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { formatLongDate } from '@/clients/helper/format-date';
 
-interface ClientDetailsProps {
+interface Props {
   client: {
     id: string;
     firstName: string;
@@ -17,7 +18,7 @@ interface ClientDetailsProps {
   };
 }
 
-export function ClientDetails({ client }: ClientDetailsProps) {
+export function ClientDetails({ client }: Props) {
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <Card>
@@ -103,15 +104,7 @@ export function ClientDetails({ client }: ClientDetailsProps) {
             <div className="text-sm font-medium text-muted-foreground">
               Start Date
             </div>
-            <div>
-              {client.startDate
-                ? new Date(client.startDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })
-                : 'Not provided'}
-            </div>
+            <div>{formatLongDate(client.startDate) || 'Not provided'}</div>
           </div>
           <div>
             <div className="text-sm font-medium text-muted-foreground">

@@ -11,6 +11,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ClientsResponse } from '@/clients/interfaces/clients-response';
+import { formatShortDate } from '../helper/format-date';
 
 interface Props {
   clients: ClientsResponse[];
@@ -78,13 +79,15 @@ export function ClientsDesktopTable({ clients }: Props) {
                   </Badge>
                 </TableCell>
                 <TableCell className="hidden lg:table-cell text-aesthetic-medium">
-                  {client.startDate instanceof Date
-                    ? client.startDate.toLocaleDateString()
-                    : client.startDate}
+                  {formatShortDate(client.startDate)}
                 </TableCell>
                 <TableCell className="text-right">
                   <Link href={`/dashboard/clients/${client._id}`}>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 cursor-pointer"
+                    >
                       <Eye className="h-4 w-4 text-aesthetic-accent" />
                       <span className="sr-only">View</span>
                     </Button>

@@ -34,11 +34,11 @@ const mockNotes = [
   },
 ];
 
-interface ClientNotesProps {
+interface Props {
   clientId: string;
 }
 
-export function ClientNotes({ clientId }: ClientNotesProps) {
+export function ClientNotes({ clientId }: Props) {
   const [notes, setNotes] = useState(mockNotes);
   const [newNote, setNewNote] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);

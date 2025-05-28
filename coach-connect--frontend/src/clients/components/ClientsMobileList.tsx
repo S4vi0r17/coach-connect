@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ClientsResponse } from '@/clients/interfaces/clients-response';
+import { formatShortDate } from '../helper/format-date';
 
 interface Props {
   clients: ClientsResponse[];
@@ -35,7 +36,11 @@ export function ClientsMobileList({ clients }: Props) {
                 <p className="text-sm text-aesthetic-muted">{client.email}</p>
               </div>
               <Link href={`/dashboard/clients/${client._id}`}>
-                <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 cursor-pointer"
+                >
                   <Eye className="h-4 w-4 text-aesthetic-accent" />
                   <span className="sr-only">View</span>
                 </Button>
@@ -54,9 +59,7 @@ export function ClientsMobileList({ clients }: Props) {
                 {client.status}
               </Badge>
               <span className="text-xs text-aesthetic-muted">
-                {client.startDate instanceof Date
-                  ? client.startDate.toLocaleDateString()
-                  : client.startDate}
+                {formatShortDate(client.startDate)}
               </span>
             </div>
           </CardContent>
