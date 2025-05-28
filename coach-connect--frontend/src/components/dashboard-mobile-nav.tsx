@@ -3,7 +3,13 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { DashboardNav } from '@/components/dashboard-nav';
 
 export function DashboardMobileNav() {
@@ -12,13 +18,20 @@ export function DashboardMobileNav() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="md:hidden">
+        <Button
+          variant="outline"
+          size="icon"
+          className="md:hidden cursor-pointer"
+        >
           <Menu className="h-5 w-5" />
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-64 p-0">
-        {/* <SheetTitle>Menú</SheetTitle> */}
+        <SheetTitle className="sr-only">Main navigation</SheetTitle>
+        <SheetDescription className="sr-only">
+          Navegación principal del panel de Coach Connect.
+        </SheetDescription>
         <div className="flex h-16 items-center border-b border-aesthetic-muted-light px-6">
           <div className="flex items-center">
             <div className="relative h-8 w-8 mr-2">

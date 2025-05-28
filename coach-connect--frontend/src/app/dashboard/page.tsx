@@ -7,15 +7,11 @@ import {
 } from '@/components/ui/card';
 import { Overview } from '@/components/dashboard/overview';
 import { RecentClients } from '@/components/dashboard/recent-clients';
-import { DashboardMobileNav } from '@/components/dashboard-mobile-nav';
 
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-aesthetic-dark">Dashboard</h1>
-        <DashboardMobileNav />
-      </div>
+      <h1 className="text-2xl font-bold text-aesthetic-dark">Dashboard</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card
           className="aesthetic-card animate-fade-in"
