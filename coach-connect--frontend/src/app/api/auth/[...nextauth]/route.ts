@@ -1,4 +1,5 @@
 import axiosClient from '@/config/axios.config';
+import { isAxiosError } from 'axios';
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -18,28 +19,63 @@ export const authOptions: AuthOptions = {
         password: { label: 'password', type: 'password' },
       },
       async authorize(credentials) {
-        const { data, status } = await axiosClient.post<LoginResponse>(
-          `${process.env.NEXT_PUBLIC_API_URL}/coach/login`,
-          {
-            email: credentials?.email,
-            password: credentials?.password,
-          }
-        );
-
-        if (status !== 201) {
-          return null;
+        if (!credentials?.email || !credentials?.password) {
+          console.log('❌ Missing credentials');
+          throw new Error('Email and password are required');
         }
 
-        const user = {
-          id: data.id,
-          name: data.fullName,
-          email: data.email,
-          accessToken: data.access_token,
-        };
+        try {
+          const { data, status } = await axiosClient.post<LoginResponse>(
+            '/coach/login',
+            {
+              email: credentials?.email,
+              password: credentials?.password,
+            }
+          );
 
-        console.log('User logged in:', user);
+          if (status !== 201) {
+            return null;
+          }
 
-        return user;
+          const user = {
+            id: data.id,
+            name: data.fullName,
+            email: data.email,
+            accessToken: data.access_token,
+          };
+
+          console.log('User logged in:', user);
+
+          return user;
+        } catch (error) {
+          console.log('❌ Login error:');
+
+          if (isAxiosError(error)) {
+            console.log('  - Message:', error.message);
+            console.log('  - Status:', error.response?.status);
+            console.log('  - Status Text:', error.response?.statusText);
+            console.log('  - Response Data:', error.response?.data);
+
+            const errorData = error.response?.data;
+            let errorMessage = 'Login failed';
+
+            if (errorData) {
+              if (typeof errorData === 'string') {
+                errorMessage = errorData;
+              } else if (errorData.message) {
+                errorMessage = errorData.message;
+              } else if (errorData.error) {
+                errorMessage = errorData.error;
+              }
+            }
+
+            throw new Error(errorMessage);
+          }
+
+          // Para errores que no son de Axios
+          console.log('  - Unknown error:', error);
+          throw new Error('An unexpected error occurred');
+        }
       },
     }),
   ],

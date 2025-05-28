@@ -20,24 +20,32 @@ export function LoginForm() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Usa signIn de next-auth
-    const res = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
-    });
+    try {
+      const res = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      });
 
-    if (res?.ok) {
-      toast('Login successful', {
-        description: 'Welcome back to CoachConnect!',
-      });
-      router.push('/dashboard');
-    } else {
+      if (res?.ok) {
+        toast('Login successful', {
+          description: 'Welcome back to CoachConnect!',
+        });
+        router.push('/dashboard');
+      } else {
+        console.error('Login failed:', res?.error);
+        toast('Login failed', {
+          description: res?.error || 'Invalid credentials',
+        });
+      }
+    } catch (error) {
+      console.error('Login error:', error);
       toast('Login failed', {
-        description: res?.error || 'Invalid credentials',
+        description: 'An unexpected error occurred',
       });
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
