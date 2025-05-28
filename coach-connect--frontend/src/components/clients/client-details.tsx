@@ -1,21 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatLongDate } from '@/clients/helper/format-date';
+import { ClientResponse } from '@/clients/interfaces/clients-response';
 
 interface Props {
-  client: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone?: string;
-    address?: string;
-    age?: number;
-    gender?: string;
-    healthNotes?: string;
-    startDate?: Date;
-    status: string;
-  };
+  client: ClientResponse;
 }
 
 export function ClientDetails({ client }: Props) {

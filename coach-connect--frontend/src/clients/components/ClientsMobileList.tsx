@@ -3,11 +3,11 @@ import { Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ClientsResponse } from '@/clients/interfaces/clients-response';
+import { ClientResponse } from '@/clients/interfaces/clients-response';
 import { formatShortDate } from '../helper/format-date';
 
 interface Props {
-  clients: ClientsResponse[];
+  clients: ClientResponse[];
 }
 
 export function ClientsMobileList({ clients }: Props) {

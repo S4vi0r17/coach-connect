@@ -17,14 +17,14 @@ import {
   ClientsDesktopTable,
   ClientsMobileList,
 } from '@/clients';
-import { ClientsResponse } from '@/clients/interfaces/clients-response';
+import { ClientResponse } from '@/clients/interfaces/clients-response';
 
 export function ClientsTable() {
   const { data: session } = useSession();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [clients, setClients] = useState<ClientsResponse[]>([]);
+  const [clients, setClients] = useState<ClientResponse[]>([]);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -32,7 +32,7 @@ export function ClientsTable() {
         return;
       }
 
-      const { data } = await axiosClient.get<ClientsResponse[]>('/clients', {
+      const { data } = await axiosClient.get<ClientResponse[]>('/clients', {
         headers: {
           Authorization: `Bearer ${session?.accessToken}`,
         },

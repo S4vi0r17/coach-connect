@@ -1,9 +1,10 @@
-export interface ClientsResponse {
+export interface ClientResponse {
     _id:         string;
     firstName:   string;
     lastName:    string;
     email:       string;
     phone:       string;
+    address:     string;
     age:         number;
     gender:      string;
     healthNotes: string[];
