@@ -83,7 +83,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
         <Card
-          className="col-span-3 aesthetic-card animate-fade-in"
+          className="col-span-4 lg:col-span-3 aesthetic-card animate-fade-in"
           style={{ animationDelay: '200ms' }}
         >
           <CardHeader>
