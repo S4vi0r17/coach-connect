@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ClientForm } from '@/clients/ClientForm';
+import { ClientForm } from '@/clients/components/ClientForm';
 
 export default function NewClientPage() {
   return (
