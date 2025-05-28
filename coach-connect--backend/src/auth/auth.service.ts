@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -53,6 +54,7 @@ export class AuthService {
 
       return newCoach;
     } catch (error) {
+      console.log(error);
       this.handleException(error);
     }
   }
@@ -79,17 +81,17 @@ export class AuthService {
     const coach = await this.coachModel.findOne({ email });
 
     if (!coach) {
-      throw new BadRequestException('Invalid email');
+      throw new BadRequestException(`Coach with email ${email} not found`);
     }
 
     if (!coach.isEmailConfirmed) {
-      throw new BadRequestException('Email not confirmed');
+      throw new ForbiddenException('Email not confirmed');
     }
 
     const isPasswordValid = await coach.comparePassword(password);
 
     if (!isPasswordValid) {
-      throw new BadRequestException('Invalid password');
+      throw new UnauthorizedException('Invalid password');
     }
 
     return {

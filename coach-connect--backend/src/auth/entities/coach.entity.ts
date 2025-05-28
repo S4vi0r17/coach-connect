@@ -22,8 +22,8 @@ export class Coach {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ unique: true })
-  googleOAuthId?: string;
+  // @Prop({ unique: true })
+  // googleOAuthId?: string;
 
   @Prop({ default: false })
   isEmailConfirmed: boolean;
