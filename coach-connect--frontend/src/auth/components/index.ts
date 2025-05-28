@@ -1,4 +1,5 @@
 export * from './AuthLogo';
+export * from './AuthHeader';
 export * from './AuthGoogleButton';
 export * from './AuthSeparator';
 export * from './RegisterForm';

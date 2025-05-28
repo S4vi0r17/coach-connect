@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import axiosClient from '@/config/axios.config';
 import axios from 'axios';
 import type React from 'react';
+import { AuthHeader } from '@/auth/components';
 
 export default function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState('');
@@ -227,27 +228,10 @@ export default function ResetPasswordPage() {
         </Button>
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-        <div className="flex flex-col space-y-2 text-center">
-          <div className="flex items-center justify-center">
-            <div className="relative h-10 w-10 mr-2">
-              <div className="absolute inset-0 bg-gradient-to-br from-aesthetic-accent to-aesthetic-accent-light rounded-md shadow-md"></div>
-              <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg">
-                CC
-              </div>
-            </div>
-            <div className="flex items-center gap-0.5 font-bold text-xl">
-              <span className="text-aesthetic-accent">Coach</span>
-              <span className="text-aesthetic-dark">Connect</span>
-            </div>
-          </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-aesthetic-dark">
-            Reset your password
-          </h1>
-          <p className="text-sm text-aesthetic-muted">
-            Enter your new password below.
-          </p>
-        </div>
-
+        <AuthHeader
+          title="Reset your password"
+          subtitle="Enter your new password below."
+        />
         {renderContent()}
       </div>
     </div>
