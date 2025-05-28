@@ -35,7 +35,7 @@ export class ClientsService {
       // const clients = await this.clientModel.find({ coachId }).exec();
       const clients = await this.clientModel
         .find()
-        .$where('coachId')
+        .where('coachId')
         .equals(coachId);
 
       return clients;
