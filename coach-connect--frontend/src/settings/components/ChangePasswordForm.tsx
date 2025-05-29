@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
+import axios from 'axios';
+import axiosClient from '@/config/axios.config';
 import {
   Card,
   CardContent,
@@ -12,9 +15,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import axios from 'axios';
 
 export function ChangePasswordForm() {
+  const { data: session } = useSession();
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -58,9 +62,18 @@ export function ChangePasswordForm() {
     setIsChangingPassword(true);
 
     try {
-      // In a real app, this would be an API call to change the password
-      // For demo purposes, we'll simulate a successful password change
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await axiosClient.put(
+        '/coach/update-password',
+        {
+          currentPassword,
+          newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        }
+      );
 
       toast('Password updated', {
         description: 'Your password has been updated successfully.',
