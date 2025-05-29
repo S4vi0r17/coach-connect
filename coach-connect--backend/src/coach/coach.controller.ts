@@ -1,6 +1,14 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Put,
+} from '@nestjs/common';
 import { CoachService } from './coach.service';
-import { RegisterCoachDto, LoginCoachDto } from '../auth/dto';
+import { RegisterCoachDto, LoginCoachDto, UpdateCoachDto } from '../auth/dto';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { GetCoach } from 'src/auth/decorators/get-coach.decorator';
@@ -53,5 +61,14 @@ export class CoachController {
   @Get('profile')
   getProfile(@GetCoach('coachId') coachId: string) {
     return this.coachService.profile(coachId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('profile')
+  updateProfile(
+    @GetCoach('coachId') coachId: string,
+    @Body() updateCoachDto: UpdateCoachDto,
+  ) {
+    return this.coachService.updateProfile(coachId, updateCoachDto);
   }
 }

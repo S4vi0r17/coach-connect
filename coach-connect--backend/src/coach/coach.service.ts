@@ -21,4 +21,19 @@ export class CoachService {
 
     return coach;
   }
+
+  async updateProfile(coachId: string, updateData: Partial<Coach>) {
+    const coach = await this.coachModel
+      .findByIdAndUpdate(coachId, updateData, {
+        new: true,
+        runValidators: true,
+      })
+      .select('-password');
+
+    if (!coach) {
+      throw new BadRequestException('Coach not found');
+    }
+
+    return coach;
+  }
 }
