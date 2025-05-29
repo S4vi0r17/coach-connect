@@ -13,6 +13,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { GetCoach } from 'src/auth/decorators/get-coach.decorator';
 import { NewPasswordDto } from 'src/auth/dto/new-password.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Controller('coach')
 export class CoachController {
@@ -70,5 +71,14 @@ export class CoachController {
     @Body() updateCoachDto: UpdateCoachDto,
   ) {
     return this.coachService.updateProfile(coachId, updateCoachDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('update-password')
+  updatePassword(
+    @GetCoach('coachId') coachId: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ) {
+    return this.coachService.updatePassword(coachId, updatePasswordDto);
   }
 }
