@@ -11,7 +11,7 @@ export default function DashboardLayout({
     <div className="flex min-h-screen flex-col bg-aesthetic-light">
       <header className="sticky top-0 z-10 border-b border-aesthetic-muted-light bg-white">
         <div className="flex h-16 items-center justify-between px-4 md:px-6">
-          <Link href={'/'} className="flex items-center">
+          <Link href={'/dashboard'} className="flex items-center">
             <div className="relative h-8 w-8 mr-2">
               <div className="absolute inset-0 bg-gradient-to-br from-aesthetic-accent to-aesthetic-accent-light rounded-md shadow-md"></div>
               <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">
