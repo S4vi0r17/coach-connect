@@ -13,7 +13,7 @@ interface Props {
 export function ClientsMobileList({ clients }: Props) {
   if (clients.length === 0) {
     return (
-      <div className="text-center py-8 text-aesthetic-muted">
+      <div className="md:hidden text-center py-8 text-aesthetic-muted">
         No clients found.
       </div>
     );
