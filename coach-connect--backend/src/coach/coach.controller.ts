@@ -52,8 +52,6 @@ export class CoachController {
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@GetCoach('coachId') coachId: string) {
-    return {
-      id: coachId,
-    };
+    return this.coachService.profile(coachId);
   }
 }

@@ -14,9 +14,11 @@ export class CoachService {
 
   async profile(coachId: string) {
     const coach = await this.coachModel.findById(coachId).select('-password');
+
     if (!coach) {
       throw new BadRequestException('Coach not found');
     }
+
     return coach;
   }
 }

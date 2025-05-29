@@ -16,7 +16,7 @@ export class Coach {
   @Prop({ required: true, trim: true, unique: true })
   email: string;
 
-  @Prop({ trim: true })
+  @Prop({ trim: true, default: null })
   phoneNumber?: string;
 
   @Prop({ required: true })
@@ -31,10 +31,10 @@ export class Coach {
   @Prop({ default: null })
   emailConfirmationToken?: string;
 
-  @Prop()
+  @Prop({ default: null })
   photoUrl?: string;
 
-  @Prop()
+  @Prop({ default: null })
   bio?: string;
 }
 
